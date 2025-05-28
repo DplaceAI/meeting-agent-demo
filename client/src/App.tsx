@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { RealtimeClient } from "@openai/realtime-api-beta";
 // @ts-expect-error - External library without type definitions
 import { WavRecorder, WavStreamPlayer } from "./lib/wavtools/index.js";
-import { instructions } from "./conversation_config.js";
+import { instructions, listeningModeInstructions } from "./conversation_config.js";
 import "./App.css";
 
 // Global refs to maintain state across renders
@@ -22,6 +22,7 @@ export function App() {
   const [error, setError] = useState('');
   const [botName, setBotName] = useState('Breakout Room Assistant');
   const [backgroundColor, setBackgroundColor] = useState('#e3f2fd');
+  const [isListeningMode, setIsListeningMode] = useState(true);
 
   // Initialize clients
   if (!clientRef.current) {
@@ -37,6 +38,22 @@ export function App() {
   }
   
   const isConnectedRef = useRef(false);
+  
+  const toggleListeningMode = useCallback(() => {
+    const client = clientRef.current;
+    if (!client || connectionStatus !== "connected") return;
+    
+    const newMode = !isListeningMode;
+    setIsListeningMode(newMode);
+    
+    // Update the session with new instructions
+    client.updateSession({
+      instructions: newMode ? listeningModeInstructions : instructions,
+      voice: 'nova',
+      turn_detection: { type: "server_vad" },
+    });
+  }, [isListeningMode, connectionStatus]);
+  
   const connectConversation = useCallback(async () => {
     if (isConnectedRef.current) return;
     isConnectedRef.current = true;
@@ -70,12 +87,14 @@ export function App() {
       client.sendUserMessageContent([
         {
           type: `input_text`,
-          text: `Hello!`,
+          text: `Hello! I'm your Breakout Room Assistant. I'm starting in listening mode to avoid interrupting. Say "Hey Assistant" when you need me, or click the button to activate me.`,
         },
       ]);
 
-      // Always use VAD mode
-      client.updateSession({
+      // Configure session with instructions, voice, and VAD mode
+      client.updateSession({ 
+        instructions: isListeningMode ? listeningModeInstructions : instructions,
+        voice: 'nova', // Female voice
         turn_detection: { type: "server_vad" },
       });
 
@@ -94,7 +113,7 @@ export function App() {
       console.error("Connection error:", error);
       setConnectionStatus("disconnected");
     }
-  }, []);
+  }, [isListeningMode]);
 
   const errorMessage = !RELAY_SERVER_URL
     ? 'Missing required "wss" parameter in URL'
@@ -118,9 +137,6 @@ export function App() {
       const wavStreamPlayer = wavStreamPlayerRef.current;
       const client = clientRef.current;
       if (!client || !wavStreamPlayer) return;
-
-      // Set instructions
-      client.updateSession({ instructions: instructions });
 
       // handle realtime events from client + server for event logging
       client.on("error", (event: any) => console.error(event));
@@ -219,30 +235,59 @@ export function App() {
                 : connectionStatus === "connecting"
                 ? "Connecting to:"
                 : connectionStatus === "connected"
-                ? "Ready to help with breakouts"
+                ? isListeningMode ? "Listening quietly (muted)" : "Ready to help with breakouts"
                 : "Failed to connect to:"}
             </div>
-            <div className="status-url">{errorMessage || (connectionStatus === "connected" ? "Listening to conversation..." : RELAY_SERVER_URL)}</div>
+            <div className="status-url">{errorMessage || (connectionStatus === "connected" ? isListeningMode ? "Say 'Hey Assistant' to activate" : "Listening to conversation..." : RELAY_SERVER_URL)}</div>
           </div>
         </div>
+        {connectionStatus === "connected" && (
+          <button 
+            onClick={toggleListeningMode}
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              padding: '10px 20px',
+              backgroundColor: isListeningMode ? '#10b981' : '#ef4444',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}
+          >
+            {isListeningMode ? '🔇 Listening Mode (Click to Activate)' : '🎤 Active Mode (Click to Mute)'}
+          </button>
+        )}
       </div>
     );
   }
 
   // Otherwise show the control panel for creating bots
   return (
-    <div className="App">
-      <h1>Breakout Room Orchestrator</h1>
-      <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '3rem', fontSize: '1.1rem' }}>
+    <div className="App" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
+      <h1 style={{ color: 'black' }}>Breakout Room Orchestrator</h1>
+      <p style={{ textAlign: 'center', color: 'black', marginBottom: '3rem', fontSize: '1.1rem' }}>
         Create AI-powered meeting assistants to help orchestrate productive breakout sessions
       </p>
       
-      <div style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
-        <div className="form-container" style={{ flex: 1, minWidth: '400px' }}>
-          <h3>Configure Your Assistant</h3>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '0 2rem' }}>
+        <div className="form-container" style={{ 
+          flex: 1, 
+          maxWidth: '500px',
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb'
+        }}>
+          <h3 style={{ color: 'black', marginBottom: '1.5rem' }}>Configure Your Assistant</h3>
           
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
               Assistant Name
             </label>
             <input
@@ -255,7 +300,7 @@ export function App() {
           </div>
           
           <div className="color-picker-section">
-            <label className="color-picker-label">Background Color</label>
+            <label className="color-picker-label" style={{ color: 'black' }}>Background Color</label>
             <input
               type="color"
               value={backgroundColor}
@@ -263,11 +308,11 @@ export function App() {
               disabled={isCreatingBot || botCreated}
               style={{ width: '60px', height: '40px' }}
             />
-            <span className="color-value">{backgroundColor}</span>
+            <span className="color-value" style={{ color: 'black' }}>{backgroundColor}</span>
           </div>
           
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
               Google Meet URL
             </label>
             <input
@@ -294,31 +339,6 @@ export function App() {
               <p>Your breakout room assistant will join the meeting shortly. Please admit it when prompted.</p>
             </div>
           )}
-        </div>
-        
-        <div className="preview-container" style={{ flex: 1, minWidth: '300px' }}>
-          <h3>Live Preview</h3>
-          <div 
-            className="preview-bot"
-            style={{ 
-              backgroundColor: backgroundColor, 
-              padding: '3rem 2rem',
-            }}
-          >
-            <div className="preview-avatar">👥</div>
-            <h4 className="preview-name">{botName}</h4>
-            <p className="preview-subtitle">Ready to orchestrate breakout rooms</p>
-          </div>
-          
-          <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px', fontSize: '0.875rem', color: '#64748b' }}>
-            <strong>What this assistant does:</strong>
-            <ul style={{ margin: '0.5rem 0', paddingLeft: '1.25rem' }}>
-              <li>Listens to meeting conversations</li>
-              <li>Suggests optimal breakout room timing</li>
-              <li>Recommends group sizes and activities</li>
-              <li>Helps facilitate smooth transitions</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
