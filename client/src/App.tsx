@@ -379,14 +379,22 @@ export function App() {
             {isCreatingBot ? 'Creating Assistant...' : botCreated ? 'Assistant Created!' : 'Create Assistant'}
           </button>
           
-          {error && <div className="error-text">{error}</div>}
-          
-          {botCreated && (
-            <div className="success-message">
-              <p>✅ Assistant created successfully!</p>
-              <p>Your breakout room assistant will join the meeting shortly. Please admit it when prompted.</p>
-            </div>
-          )}
+          <div style={{ 
+            minHeight: '60px',
+            marginTop: '0.75rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start'
+          }}>
+            {error && <div className="error-text">{error}</div>}
+            
+            {botCreated && (
+              <div className="success-message">
+                <p>✅ Assistant created successfully!</p>
+                <p>Your breakout room assistant will join the meeting shortly. Please admit it when prompted.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
