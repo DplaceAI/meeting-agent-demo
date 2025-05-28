@@ -233,72 +233,91 @@ export function App() {
   return (
     <div className="App">
       <h1>Breakout Room Orchestrator</h1>
+      <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '3rem', fontSize: '1.1rem' }}>
+        Create AI-powered meeting assistants to help orchestrate productive breakout sessions
+      </p>
       
-      <div style={{ display: 'flex', gap: '40px', maxWidth: '900px', margin: '0 auto' }}>
-        <div className="form-container" style={{ flex: 1 }}>
-          <h3>Configure Your Bot</h3>
-          <input
-            type="text"
-            placeholder="Bot Name"
-            value={botName}
-            onChange={(e) => setBotName(e.target.value)}
-            disabled={isCreatingBot || botCreated}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
+      <div style={{ display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
+        <div className="form-container" style={{ flex: 1, minWidth: '400px' }}>
+          <h3>Configure Your Assistant</h3>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-            <label style={{ fontSize: '14px' }}>Background Color:</label>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+              Assistant Name
+            </label>
+            <input
+              type="text"
+              placeholder="Enter assistant name"
+              value={botName}
+              onChange={(e) => setBotName(e.target.value)}
+              disabled={isCreatingBot || botCreated}
+            />
+          </div>
+          
+          <div className="color-picker-section">
+            <label className="color-picker-label">Background Color</label>
             <input
               type="color"
               value={backgroundColor}
               onChange={(e) => setBackgroundColor(e.target.value)}
               disabled={isCreatingBot || botCreated}
-              style={{ width: '60px', height: '40px', cursor: 'pointer' }}
+              style={{ width: '60px', height: '40px' }}
             />
-            <span style={{ fontSize: '14px', color: '#666' }}>{backgroundColor}</span>
+            <span className="color-value">{backgroundColor}</span>
           </div>
           
-          <input
-            type="text"
-            placeholder="Enter Google Meet URL"
-            value={meetingUrl}
-            onChange={(e) => setMeetingUrl(e.target.value)}
-            disabled={isCreatingBot || botCreated}
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+              Google Meet URL
+            </label>
+            <input
+              type="text"
+              placeholder="https://meet.google.com/xxx-xxxx-xxx"
+              value={meetingUrl}
+              onChange={(e) => setMeetingUrl(e.target.value)}
+              disabled={isCreatingBot || botCreated}
+            />
+          </div>
           
           <button
             onClick={createBot}
             disabled={isCreatingBot || botCreated}
-            style={{ padding: '10px 20px', cursor: 'pointer', width: '100%' }}
           >
-            {isCreatingBot ? 'Creating Bot...' : botCreated ? 'Bot Created!' : 'Create Bot'}
+            {isCreatingBot ? 'Creating Assistant...' : botCreated ? 'Assistant Created!' : 'Create Assistant'}
           </button>
           
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <div className="error-text">{error}</div>}
           
           {botCreated && (
-            <div style={{ marginTop: '20px', padding: '20px', background: '#f0f0f0', borderRadius: '8px' }}>
-              <p>✅ Bot created successfully!</p>
-              <p>The bot will join your meeting. Please admit it when it tries to join.</p>
+            <div className="success-message">
+              <p>✅ Assistant created successfully!</p>
+              <p>Your breakout room assistant will join the meeting shortly. Please admit it when prompted.</p>
             </div>
           )}
         </div>
         
-        <div style={{ flex: 1 }}>
-          <h3>Preview</h3>
-          <div style={{ 
-            backgroundColor: backgroundColor, 
-            padding: '40px', 
-            borderRadius: '12px',
-            textAlign: 'center',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '10px' }}>👥</div>
-            <h4 style={{ margin: 0, color: '#333' }}>{botName}</h4>
-            <p style={{ marginTop: '10px', color: '#666', fontSize: '14px' }}>
-              Ready to orchestrate breakout rooms
-            </p>
+        <div className="preview-container" style={{ flex: 1, minWidth: '300px' }}>
+          <h3>Live Preview</h3>
+          <div 
+            className="preview-bot"
+            style={{ 
+              backgroundColor: backgroundColor, 
+              padding: '3rem 2rem',
+            }}
+          >
+            <div className="preview-avatar">👥</div>
+            <h4 className="preview-name">{botName}</h4>
+            <p className="preview-subtitle">Ready to orchestrate breakout rooms</p>
+          </div>
+          
+          <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px', fontSize: '0.875rem', color: '#64748b' }}>
+            <strong>What this assistant does:</strong>
+            <ul style={{ margin: '0.5rem 0', paddingLeft: '1.25rem' }}>
+              <li>Listens to meeting conversations</li>
+              <li>Suggests optimal breakout room timing</li>
+              <li>Recommends group sizes and activities</li>
+              <li>Helps facilitate smooth transitions</li>
+            </ul>
           </div>
         </div>
       </div>
