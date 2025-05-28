@@ -268,36 +268,39 @@ export function App() {
 
   // Otherwise show the control panel for creating bots
   return (
-    <div className="App" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
-      <h1 style={{ color: 'black' }}>Breakout Room Orchestrator</h1>
+    <div className="App" style={{ backgroundColor: 'white', padding: '1rem' }}>
+      <h1 style={{ color: 'black', marginBottom: '2rem' }}>Breakout Room Orchestrator</h1>
       
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '0 2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '0 1rem' }}>
         <div className="form-container" style={{ 
           flex: 1, 
-          maxWidth: '500px',
+          maxWidth: '800px',
           backgroundColor: 'white',
-          padding: '2rem',
+          padding: '2rem 3rem',
           borderRadius: '12px',
-          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06)',
           border: '1px solid #e5e7eb'
         }}>
-          <h3 style={{ color: 'black', marginBottom: '0.5rem' }}>Configure Your Assistant</h3>
+          <h3 style={{ color: 'black', marginBottom: '1.25rem', textAlign: 'center' }}>Configure Your Assistant</h3>
           
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
               Assistant Name
             </label>
             <input
               type="text"
-              placeholder="Enter assistant name"
+              placeholder="e.g., Marketing Team Assistant, Engineering Bot, etc."
               value={botName}
               onChange={(e) => setBotName(e.target.value)}
               disabled={isCreatingBot || botCreated}
-              style={{ color: 'black' }}
+              style={{ 
+                color: 'black',
+                width: '100%'
+              }}
             />
           </div>
           
-          <div className="color-picker-section">
+          <div className="color-picker-section" style={{ marginBottom: '1.25rem' }}>
             <label className="color-picker-label" style={{ color: 'black' }}>Background Color</label>
             <input
               type="color"
@@ -309,28 +312,49 @@ export function App() {
             <span className="color-value" style={{ color: 'black' }}>{backgroundColor}</span>
           </div>
           
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
               Google Meet URL
             </label>
             <input
-              type="text"
-              placeholder="https://meet.google.com/xxx-xxxx-xxx"
+              type="url"
+              placeholder="Paste your Google Meet link here (e.g., https://meet.google.com/xxx-xxxx-xxx)"
               value={meetingUrl}
               onChange={(e) => setMeetingUrl(e.target.value)}
               disabled={isCreatingBot || botCreated}
+              style={{ 
+                color: 'black',
+                width: '100%'
+              }}
             />
           </div>
           
-          <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ marginTop: '1.25rem', marginBottom: '1.25rem' }}>
             <label style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '0.75rem',
+              gap: '1rem',
               cursor: 'pointer',
               fontSize: '0.875rem',
               fontWeight: '500',
-              color: 'black'
+              color: 'black',
+              padding: '1rem 1.25rem',
+              background: '#fafafa',
+              border: '2px solid #e5e7eb',
+              borderRadius: '12px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (!isCreatingBot && !botCreated) {
+                e.currentTarget.style.borderColor = '#9ca3af';
+                e.currentTarget.style.background = 'white';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isCreatingBot && !botCreated) {
+                e.currentTarget.style.borderColor = '#e5e7eb';
+                e.currentTarget.style.background = '#fafafa';
+              }
             }}>
               <input
                 type="checkbox"
@@ -340,7 +364,8 @@ export function App() {
                 style={{ 
                   width: '20px', 
                   height: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  accentColor: '#3b82f6'
                 }}
               />
               <span>Start in Listening Mode (Bot stays quiet until called)</span>
