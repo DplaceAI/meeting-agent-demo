@@ -197,6 +197,11 @@
   background: white;
 }
 
+.form-container input[type="text"]::placeholder {
+  color: black !important;
+  opacity: 1;
+}
+
 .form-container input[type="color"] {
   border: 2px solid #e5e7eb;
   border-radius: 8px;

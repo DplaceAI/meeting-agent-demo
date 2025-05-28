@@ -282,9 +282,6 @@ export function App() {
           border: '1px solid #e5e7eb'
         }}>
           <h3 style={{ color: 'black', marginBottom: '0.5rem' }}>Configure Your Assistant</h3>
-          <p style={{ color: '#6b7280', marginBottom: '2rem', fontSize: '0.9rem' }}>
-            Create AI-powered meeting assistants to help orchestrate productive breakout sessions
-          </p>
           
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
@@ -296,6 +293,7 @@ export function App() {
               value={botName}
               onChange={(e) => setBotName(e.target.value)}
               disabled={isCreatingBot || botCreated}
+              style={{ color: 'black' }}
             />
           </div>
           
@@ -347,14 +345,6 @@ export function App() {
               />
               <span>Start in Listening Mode (Bot stays quiet until called)</span>
             </label>
-            <p style={{ 
-              marginTop: '0.5rem', 
-              marginLeft: '2rem',
-              fontSize: '0.75rem', 
-              color: '#6b7280' 
-            }}>
-              When enabled, the assistant will only respond when someone says "Hey Assistant"
-            </p>
           </div>
           
           <button
