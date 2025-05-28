@@ -20,9 +20,22 @@ app.use(express.json());
 
 // Enable CORS for your frontend
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const allowedOrigins = [
+    'https://meeting-agent-demo.vercel.app',
+    'https://meeting-agent-demo-git-main-wpuliers-projects.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
@@ -89,7 +102,7 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
 // Start server on port 3000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT} (HTTP + WebSocket)`);
 });
