@@ -20,7 +20,7 @@ export function App() {
   const [isCreatingBot, setIsCreatingBot] = useState(false);
   const [botCreated, setBotCreated] = useState(false);
   const [error, setError] = useState('');
-  const [botName, setBotName] = useState('Breakout Room Assistant');
+  const [botName, setBotName] = useState('AI News Leader');
   const [backgroundColor, setBackgroundColor] = useState('#e3f2fd');
   const [isListeningMode, setIsListeningMode] = useState(false);
 
@@ -87,7 +87,7 @@ export function App() {
       client.sendUserMessageContent([
         {
           type: `input_text`,
-          text: `Hello! I'm your Breakout Room Assistant. I'm ready to help you manage breakout rooms and facilitate your meeting. How can I help you today?`,
+          text: `Hello!`,
         },
       ]);
 
@@ -219,8 +219,8 @@ export function App() {
     return (
       <div className="app-container" style={{ backgroundColor: bgColor }}>
         <div className="bot-identity">
-          <div className="bot-avatar">👥</div>
-          <h2 className="bot-name">Breakout Room Assistant</h2>
+          <div className="bot-avatar">🤖</div>
+          <h2 className="bot-name">AI News Leader</h2>
         </div>
         <div className="status-indicator">
           <div
@@ -235,10 +235,10 @@ export function App() {
                 : connectionStatus === "connecting"
                 ? "Connecting to:"
                 : connectionStatus === "connected"
-                ? isListeningMode ? "Listening quietly (muted)" : "Ready to help with breakouts"
+                ? isListeningMode ? "Listening quietly (muted)" : "Ready to discuss AI news"
                 : "Failed to connect to:"}
             </div>
-            <div className="status-url">{errorMessage || (connectionStatus === "connected" ? isListeningMode ? "Say 'Hey Assistant' to activate" : "Listening to conversation..." : RELAY_SERVER_URL)}</div>
+            <div className="status-url">{errorMessage || (connectionStatus === "connected" ? isListeningMode ? "Say 'Hey Leader' to activate" : "Leading AI discussion..." : RELAY_SERVER_URL)}</div>
           </div>
         </div>
         {connectionStatus === "connected" && (
@@ -269,7 +269,7 @@ export function App() {
   // Otherwise show the control panel for creating bots
   return (
     <div className="App" style={{ backgroundColor: 'white', padding: '1rem' }}>
-      <h1 style={{ color: 'black', marginBottom: '2rem' }}>Breakout Room Orchestrator</h1>
+      <h1 style={{ color: 'black', marginBottom: '2rem' }}>AI Meeting Leader</h1>
       
       <div style={{ display: 'flex', justifyContent: 'center', padding: '0 1rem' }}>
         <div className="form-container" style={{ 
@@ -289,7 +289,7 @@ export function App() {
             </label>
             <input
               type="text"
-              placeholder="e.g., Marketing Team Assistant, Engineering Bot, etc."
+              placeholder="e.g., AI News Bot, Tech Meeting Leader, Innovation Guide"
               value={botName}
               onChange={(e) => setBotName(e.target.value)}
               disabled={isCreatingBot || botCreated}
@@ -393,8 +393,8 @@ export function App() {
             
             {botCreated && (
               <div className="success-message">
-                <p>✅ Assistant created successfully!</p>
-                <p>Your breakout room assistant will join the meeting shortly. Please admit it when prompted.</p>
+                <p>✅ AI Leader created successfully!</p>
+                <p>Your AI meeting leader will join the meeting shortly. Please admit it when prompted.</p>
               </div>
             )}
           </div>
