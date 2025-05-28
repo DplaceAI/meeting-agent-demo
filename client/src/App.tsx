@@ -161,8 +161,8 @@ export function App() {
 
     try {
       // Use ngrok URL directly
-      const wsUrl = 'wss://af0e-66-108-88-150.ngrok-free.app';
-      const backendUrl = 'https://af0e-66-108-88-150.ngrok-free.app';
+      const wsUrl = 'wss://b336-66-108-88-150.ngrok-free.app';
+      const backendUrl = 'https://b336-66-108-88-150.ngrok-free.app';
       
       const response = await fetch(`${backendUrl}/create-bot`, {
         method: 'POST',

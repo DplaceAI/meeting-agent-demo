@@ -55,7 +55,7 @@ app.post('/create-bot', async (req, res) => {
           camera: {
             kind: "webpage",
             config: {
-              url: `https://client-6j6u0nfyv-wpuliers-projects.vercel.app?wss=${websocket_url || 'wss://af0e-66-108-88-150.ngrok-free.app'}`
+              url: `https://client-6j6u0nfyv-wpuliers-projects.vercel.app?wss=${websocket_url || 'wss://b336-66-108-88-150.ngrok-free.app'}`
             }
           }
         },
