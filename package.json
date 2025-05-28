@@ -4,10 +4,11 @@
   "description": "Voice agent demo with Recall.ai and OpenAI",
   "type": "module",
   "scripts": {
-    "build": "cd node-server && npm install",
+    "build": "npm install && cd node-server && npm install",
     "start": "node server.js"
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "dependencies": {}
 } 
