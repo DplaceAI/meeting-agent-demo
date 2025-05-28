@@ -182,6 +182,7 @@
   border: 1px solid #e5e7eb;
   width: 100%;
   max-width: 800px;
+  box-sizing: border-box;
 }
 
 .form-container input[type="text"], 
@@ -380,4 +381,8 @@
   font-size: 0.875rem;
   margin-top: 0.5rem;
   font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
 }
