@@ -22,7 +22,7 @@ export function App() {
   const [error, setError] = useState('');
   const [botName, setBotName] = useState('Breakout Room Assistant');
   const [backgroundColor, setBackgroundColor] = useState('#e3f2fd');
-  const [isListeningMode, setIsListeningMode] = useState(true);
+  const [isListeningMode, setIsListeningMode] = useState(false);
 
   // Initialize clients
   if (!clientRef.current) {
@@ -87,7 +87,7 @@ export function App() {
       client.sendUserMessageContent([
         {
           type: `input_text`,
-          text: `Hello! I'm your Breakout Room Assistant. I'm starting in listening mode to avoid interrupting. Say "Hey Assistant" when you need me, or click the button to activate me.`,
+          text: `Hello! I'm your Breakout Room Assistant. I'm ready to help you manage breakout rooms and facilitate your meeting. How can I help you today?`,
         },
       ]);
 
@@ -375,6 +375,9 @@ export function App() {
           <button
             onClick={createBot}
             disabled={isCreatingBot || botCreated}
+            style={{
+              minWidth: '200px'
+            }}
           >
             {isCreatingBot ? 'Creating Assistant...' : botCreated ? 'Assistant Created!' : 'Create Assistant'}
           </button>
