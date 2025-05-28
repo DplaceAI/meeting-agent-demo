@@ -49,7 +49,7 @@ export function App() {
     // Update the session with new instructions
     client.updateSession({
       instructions: newMode ? listeningModeInstructions : instructions,
-      voice: 'nova',
+      voice: 'shimmer',
       turn_detection: { type: "server_vad" },
     });
   }, [isListeningMode, connectionStatus]);
@@ -94,7 +94,7 @@ export function App() {
       // Configure session with instructions, voice, and VAD mode
       client.updateSession({ 
         instructions: isListeningMode ? listeningModeInstructions : instructions,
-        voice: 'nova', // Female voice
+        voice: 'shimmer', // Female voice
         turn_detection: { type: "server_vad" },
       });
 
@@ -270,9 +270,6 @@ export function App() {
   return (
     <div className="App" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
       <h1 style={{ color: 'black' }}>Breakout Room Orchestrator</h1>
-      <p style={{ textAlign: 'center', color: 'black', marginBottom: '3rem', fontSize: '1.1rem' }}>
-        Create AI-powered meeting assistants to help orchestrate productive breakout sessions
-      </p>
       
       <div style={{ display: 'flex', justifyContent: 'center', padding: '0 2rem' }}>
         <div className="form-container" style={{ 
@@ -284,7 +281,10 @@ export function App() {
           boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05)',
           border: '1px solid #e5e7eb'
         }}>
-          <h3 style={{ color: 'black', marginBottom: '1.5rem' }}>Configure Your Assistant</h3>
+          <h3 style={{ color: 'black', marginBottom: '0.5rem' }}>Configure Your Assistant</h3>
+          <p style={{ color: '#6b7280', marginBottom: '2rem', fontSize: '0.9rem' }}>
+            Create AI-powered meeting assistants to help orchestrate productive breakout sessions
+          </p>
           
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500', color: 'black' }}>
@@ -322,6 +322,39 @@ export function App() {
               onChange={(e) => setMeetingUrl(e.target.value)}
               disabled={isCreatingBot || botCreated}
             />
+          </div>
+          
+          <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.75rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: 'black'
+            }}>
+              <input
+                type="checkbox"
+                checked={isListeningMode}
+                onChange={(e) => setIsListeningMode(e.target.checked)}
+                disabled={isCreatingBot || botCreated}
+                style={{ 
+                  width: '20px', 
+                  height: '20px',
+                  cursor: 'pointer'
+                }}
+              />
+              <span>Start in Listening Mode (Bot stays quiet until called)</span>
+            </label>
+            <p style={{ 
+              marginTop: '0.5rem', 
+              marginLeft: '2rem',
+              fontSize: '0.75rem', 
+              color: '#6b7280' 
+            }}>
+              When enabled, the assistant will only respond when someone says "Hey Assistant"
+            </p>
           </div>
           
           <button
