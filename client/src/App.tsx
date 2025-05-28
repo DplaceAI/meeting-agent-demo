@@ -20,6 +20,8 @@ export function App() {
   const [isCreatingBot, setIsCreatingBot] = useState(false);
   const [botCreated, setBotCreated] = useState(false);
   const [error, setError] = useState('');
+  const [botName, setBotName] = useState('Breakout Room Assistant');
+  const [backgroundColor, setBackgroundColor] = useState('#e3f2fd');
 
   // Initialize clients
   if (!clientRef.current) {
@@ -172,8 +174,9 @@ export function App() {
         },
         body: JSON.stringify({
           meeting_url: meetingUrl,
-          bot_name: "Voice Assistant",
-          websocket_url: wsUrl
+          bot_name: botName,
+          websocket_url: wsUrl,
+          background_color: backgroundColor
         })
       });
 
@@ -194,8 +197,15 @@ export function App() {
 
   // If we have wss parameter, show the bot interface (what the bot shows in the meeting)
   if (RELAY_SERVER_URL) {
+    // Parse background color from URL
+    const bgColor = params.get('bg') || '#e3f2fd';
+    
     return (
-      <div className="app-container">
+      <div className="app-container" style={{ backgroundColor: bgColor }}>
+        <div className="bot-identity">
+          <div className="bot-avatar">👥</div>
+          <h2 className="bot-name">Breakout Room Assistant</h2>
+        </div>
         <div className="status-indicator">
           <div
             className={`status-dot ${
@@ -209,10 +219,10 @@ export function App() {
                 : connectionStatus === "connecting"
                 ? "Connecting to:"
                 : connectionStatus === "connected"
-                ? "Connected to:"
+                ? "Ready to help with breakouts"
                 : "Failed to connect to:"}
             </div>
-            <div className="status-url">{errorMessage || RELAY_SERVER_URL}</div>
+            <div className="status-url">{errorMessage || (connectionStatus === "connected" ? "Listening to conversation..." : RELAY_SERVER_URL)}</div>
           </div>
         </div>
       </div>
@@ -222,34 +232,75 @@ export function App() {
   // Otherwise show the control panel for creating bots
   return (
     <div className="App">
-      <h1>Voice Agent Control Panel</h1>
+      <h1>Breakout Room Orchestrator</h1>
       
-      <div className="form-container">
-        <input
-          type="text"
-          placeholder="Enter Google Meet URL"
-          value={meetingUrl}
-          onChange={(e) => setMeetingUrl(e.target.value)}
-          disabled={isCreatingBot || botCreated}
-          style={{ width: '400px', padding: '10px', marginBottom: '10px' }}
-        />
-        
-        <button
-          onClick={createBot}
-          disabled={isCreatingBot || botCreated}
-          style={{ padding: '10px 20px', cursor: 'pointer' }}
-        >
-          {isCreatingBot ? 'Creating Bot...' : botCreated ? 'Bot Created!' : 'Create Bot'}
-        </button>
-        
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        
-        {botCreated && (
-          <div style={{ marginTop: '20px', padding: '20px', background: '#f0f0f0', borderRadius: '8px' }}>
-            <p>✅ Bot created successfully!</p>
-            <p>The bot will join your meeting. Please admit it when it tries to join.</p>
+      <div style={{ display: 'flex', gap: '40px', maxWidth: '900px', margin: '0 auto' }}>
+        <div className="form-container" style={{ flex: 1 }}>
+          <h3>Configure Your Bot</h3>
+          <input
+            type="text"
+            placeholder="Bot Name"
+            value={botName}
+            onChange={(e) => setBotName(e.target.value)}
+            disabled={isCreatingBot || botCreated}
+            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+          />
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+            <label style={{ fontSize: '14px' }}>Background Color:</label>
+            <input
+              type="color"
+              value={backgroundColor}
+              onChange={(e) => setBackgroundColor(e.target.value)}
+              disabled={isCreatingBot || botCreated}
+              style={{ width: '60px', height: '40px', cursor: 'pointer' }}
+            />
+            <span style={{ fontSize: '14px', color: '#666' }}>{backgroundColor}</span>
           </div>
-        )}
+          
+          <input
+            type="text"
+            placeholder="Enter Google Meet URL"
+            value={meetingUrl}
+            onChange={(e) => setMeetingUrl(e.target.value)}
+            disabled={isCreatingBot || botCreated}
+            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+          />
+          
+          <button
+            onClick={createBot}
+            disabled={isCreatingBot || botCreated}
+            style={{ padding: '10px 20px', cursor: 'pointer', width: '100%' }}
+          >
+            {isCreatingBot ? 'Creating Bot...' : botCreated ? 'Bot Created!' : 'Create Bot'}
+          </button>
+          
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          
+          {botCreated && (
+            <div style={{ marginTop: '20px', padding: '20px', background: '#f0f0f0', borderRadius: '8px' }}>
+              <p>✅ Bot created successfully!</p>
+              <p>The bot will join your meeting. Please admit it when it tries to join.</p>
+            </div>
+          )}
+        </div>
+        
+        <div style={{ flex: 1 }}>
+          <h3>Preview</h3>
+          <div style={{ 
+            backgroundColor: backgroundColor, 
+            padding: '40px', 
+            borderRadius: '12px',
+            textAlign: 'center',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '10px' }}>👥</div>
+            <h4 style={{ margin: 0, color: '#333' }}>{botName}</h4>
+            <p style={{ marginTop: '10px', color: '#666', fontSize: '14px' }}>
+              Ready to orchestrate breakout rooms
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

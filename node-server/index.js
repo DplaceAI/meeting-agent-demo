@@ -49,13 +49,21 @@ app.get('/health', (req, res) => {
 
 // Create bot endpoint
 app.post('/create-bot', async (req, res) => {
-  const { meeting_url, bot_name, websocket_url } = req.body;
+  const { meeting_url, bot_name, websocket_url, background_color } = req.body;
   
   if (!meeting_url) {
     return res.status(400).json({ error: 'Meeting URL is required' });
   }
 
   try {
+    // Build the frontend URL with parameters
+    let frontendUrl = `${FRONTEND_URL}?wss=${websocket_url || WEBSOCKET_URL}`;
+    
+    // Add background color if provided
+    if (background_color) {
+      frontendUrl += `&bg=${encodeURIComponent(background_color)}`;
+    }
+    
     const response = await fetch('https://us-west-2.recall.ai/api/v1/bot/', {
       method: 'POST',
       headers: {
@@ -70,7 +78,7 @@ app.post('/create-bot', async (req, res) => {
           camera: {
             kind: "webpage",
             config: {
-              url: `${FRONTEND_URL}?wss=${websocket_url || WEBSOCKET_URL}`
+              url: frontendUrl
             }
           }
         },
