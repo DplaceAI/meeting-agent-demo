@@ -160,9 +160,10 @@ export function App() {
     setError('');
 
     try {
-      // Use ngrok URL directly
-      const wsUrl = 'wss://b336-66-108-88-150.ngrok-free.app';
-      const backendUrl = 'https://b336-66-108-88-150.ngrok-free.app';
+      // Use environment variable or fallback to ngrok for local development
+      const backendHost = import.meta.env.VITE_BACKEND_URL || 'https://b336-66-108-88-150.ngrok-free.app';
+      const wsUrl = backendHost.replace('https://', 'wss://');
+      const backendUrl = backendHost;
       
       const response = await fetch(`${backendUrl}/create-bot`, {
         method: 'POST',

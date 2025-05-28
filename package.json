@@ -1,0 +1,12 @@
+{
+  "name": "voice-agent-demo",
+  "version": "1.0.0",
+  "description": "Voice agent demo with Recall.ai and OpenAI",
+  "scripts": {
+    "build": "cd node-server && npm install",
+    "start": "cd node-server && npm start"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

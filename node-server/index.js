@@ -6,6 +6,8 @@ import http from 'http';
 
 dotenv.config();
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://meeting-agent-demo.vercel.app';
+const WEBSOCKET_URL = process.env.WEBSOCKET_URL || 'wss://b336-66-108-88-150.ngrok-free.app';
 
 if (!OPENAI_API_KEY) {
   console.error('Missing OpenAI API key. Please set it in the .env file.');
@@ -55,7 +57,7 @@ app.post('/create-bot', async (req, res) => {
           camera: {
             kind: "webpage",
             config: {
-              url: `https://meeting-agent-demo.vercel.app?wss=${websocket_url || 'wss://b336-66-108-88-150.ngrok-free.app'}`
+              url: `${FRONTEND_URL}?wss=${websocket_url || WEBSOCKET_URL}`
             }
           }
         },
